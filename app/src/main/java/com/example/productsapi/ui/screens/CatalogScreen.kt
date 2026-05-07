@@ -1,15 +1,17 @@
 package com.example.productsapi.ui.screens
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -30,7 +32,7 @@ import com.example.productsapi.viewmodel.CatalogViewModel
     @Composable
     fun CatalogScreen(viewModel: CatalogViewModel = viewModel()) {
         Scaffold(
-            topBar = { Text("CatalogApp API 36", style = MaterialTheme.typography.titleLarge) }
+            topBar = { Text("Catalogo Productos", style = MaterialTheme.typography.titleLarge) }
         ) { padding ->
             Box(modifier = Modifier.padding(padding).fillMaxSize()) {
                 when (val currentState = viewModel.state) {
@@ -57,6 +59,10 @@ import com.example.productsapi.viewmodel.CatalogViewModel
                         Column(modifier = Modifier.padding(start = 16.dp)) {
                             Text(product.title, fontWeight = FontWeight.Bold)
                             Text("$${product.price}", color = Color.Gray)
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Button(onClick = { }) {
+                                Text("Agregar al carrito")
+                            }
                         }
                     }
                 }
