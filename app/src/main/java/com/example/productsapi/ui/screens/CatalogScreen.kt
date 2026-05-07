@@ -108,7 +108,7 @@ fun ProductList(
                         }
                         Spacer(modifier = Modifier.height(8.dp))
                         Button(onClick = { onAddToCart(product) }) {
-                            Text("Notificación oliga")
+                            Text("Notificacion")
                         }
                     }
                 }
