@@ -11,8 +11,10 @@ import com.example.productsapi.model.Product
 object CatalogNotificationHelper {
     const val NETWORK_NOTIFICATION_ID = 1001
 
+    private const val WIFI_NOTIFICATION_ID = 2001
     private const val NETWORK_CHANNEL_ID = "network_status_channel"
     private const val CART_CHANNEL_ID = "cart_notifications_channel"
+    private const val WIFI_CHANNEL_ID = "wifi_status_channel"
 
     fun createChannels(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -34,8 +36,17 @@ object CatalogNotificationHelper {
                 description = "Mensajes informativos al agregar productos al carrito."
             }
 
+            val wifiChannel = NotificationChannel(
+                WIFI_CHANNEL_ID,
+                "Estado de Wi-Fi",
+                NotificationManager.IMPORTANCE_LOW
+            ).apply {
+                description = "Notificación fija para mostrar el estado de Wi-Fi."
+            }
+
             notificationManager.createNotificationChannel(networkChannel)
             notificationManager.createNotificationChannel(cartChannel)
+            notificationManager.createNotificationChannel(wifiChannel)
         }
     }
 
@@ -56,6 +67,33 @@ object CatalogNotificationHelper {
             .build()
     }
 
+    fun showWifiStatusNotification(context: Context) {
+        createChannels(context)
+
+        val notification = NotificationCompat.Builder(context, WIFI_CHANNEL_ID)
+            .setSmallIcon(android.R.drawable.presence_online)
+            .setContentTitle("Wi-Fi activo")
+            .setContentText("Conectado a una red Wi-Fi. Esta notificación está bloqueada.")
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText(
+                        "Conectado a una red Wi-Fi. " +
+                                "Esta notificación está bloqueada para que no se pueda deslizar."
+                    )
+            )
+            .setCategory(NotificationCompat.CATEGORY_STATUS)
+            .setOngoing(true)
+            .setAutoCancel(false)
+            .setOnlyAlertOnce(true)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .build()
+
+        val notificationManager = context.getSystemService(
+            Context.NOTIFICATION_SERVICE
+        ) as NotificationManager
+        notificationManager.notify(WIFI_NOTIFICATION_ID, notification)
+    }
+
     fun showCartSuccessNotification(context: Context, product: Product) {
         createChannels(context)
 
@@ -71,7 +109,9 @@ object CatalogNotificationHelper {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .build()
 
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager = context.getSystemService(
+            Context.NOTIFICATION_SERVICE
+        ) as NotificationManager
         notificationManager.notify(product.id, notification)
     }
 }

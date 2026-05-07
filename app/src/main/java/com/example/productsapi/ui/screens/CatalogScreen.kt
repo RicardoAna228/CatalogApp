@@ -77,6 +77,11 @@ fun CatalogScreen(viewModel: CatalogViewModel = viewModel()) {
                             context.applicationContext,
                             product
                         )
+                    },
+                    onShowWifiNotification = {
+                        CatalogNotificationHelper.showWifiStatusNotification(
+                            context.applicationContext
+                        )
                     }
                 )
             }
@@ -87,7 +92,8 @@ fun CatalogScreen(viewModel: CatalogViewModel = viewModel()) {
 @Composable
 fun ProductList(
     products: List<Product>,
-    onAddToCart: (Product) -> Unit
+    onAddToCart: (Product) -> Unit,
+    onShowWifiNotification: () -> Unit
 ) {
     LazyColumn {
         items(products) { product ->
@@ -107,7 +113,7 @@ fun ProductList(
                             Text("Agregar al carrito")
                         }
                         Spacer(modifier = Modifier.height(8.dp))
-                        Button(onClick = { onAddToCart(product) }) {
+                        Button(onClick =  onShowWifiNotification ) {
                             Text("Notificacion")
                         }
                     }
