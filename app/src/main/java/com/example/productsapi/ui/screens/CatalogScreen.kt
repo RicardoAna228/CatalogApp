@@ -60,7 +60,7 @@ fun CatalogScreen(viewModel: CatalogViewModel = viewModel()) {
     NetworkMandatoryNotificationHandler()
 
     Scaffold(
-        topBar = { Text("CatalogApp API 36", style = MaterialTheme.typography.titleLarge) }
+        topBar = { Text("CatalogApp", style = MaterialTheme.typography.titleLarge) }
     ) { padding ->
         Box(modifier = Modifier.padding(padding).fillMaxSize()) {
             when (val currentState = viewModel.state) {
@@ -114,7 +114,7 @@ fun ProductList(
                         }
                         Spacer(modifier = Modifier.height(8.dp))
                         Button(onClick =  onShowWifiNotification ) {
-                            Text("Notificacion")
+                            Text("Notificación")
                         }
                     }
                 }

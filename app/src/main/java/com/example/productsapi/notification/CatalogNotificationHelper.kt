@@ -3,14 +3,17 @@ package com.example.productsapi.notification
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.example.productsapi.model.Product
 
 object CatalogNotificationHelper {
     const val NETWORK_NOTIFICATION_ID = 1001
-
+    const val ACTION_RESTORE_WIFI_NOTIFICATION =
+        "com.example.productsapi.notification.RESTORE_WIFI_NOTIFICATION"
     private const val WIFI_NOTIFICATION_ID = 2001
     private const val NETWORK_CHANNEL_ID = "network_status_channel"
     private const val CART_CHANNEL_ID = "cart_notifications_channel"
@@ -84,9 +87,13 @@ object CatalogNotificationHelper {
             .setCategory(NotificationCompat.CATEGORY_STATUS)
             .setOngoing(true)
             .setAutoCancel(false)
+            .setDeleteIntent(createWifiRestorePendingIntent(context))
             .setOnlyAlertOnce(true)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .build()
+            .apply {
+                flags = flags or Notification.FLAG_ONGOING_EVENT or Notification.FLAG_NO_CLEAR
+            }
 
         val notificationManager = context.getSystemService(
             Context.NOTIFICATION_SERVICE
@@ -94,6 +101,13 @@ object CatalogNotificationHelper {
         notificationManager.notify(WIFI_NOTIFICATION_ID, notification)
     }
 
+    private fun createWifiRestorePendingIntent(context: Context): PendingIntent {
+        val intent = Intent(context, WifiNotificationDismissedReceiver::class.java).apply {
+            action = ACTION_RESTORE_WIFI_NOTIFICATION
+        }
+        val flags = PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        return PendingIntent.getBroadcast(context, WIFI_NOTIFICATION_ID, intent, flags)
+    }
     fun showCartSuccessNotification(context: Context, product: Product) {
         createChannels(context)
 
